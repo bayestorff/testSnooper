@@ -26,6 +26,6 @@ if (arrayRovers[0].initialPosition !== arrayRovers[1].initialPosition) {
   expect(arrayRovers[0].command).to.not.equal(arrayRovers[1].command);
 }
 
-const output = main(5, arrayRovers);
-
+/* checking the output */
+const output = main(size, arrayRovers);
 console.log(output);
