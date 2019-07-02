@@ -48,6 +48,10 @@ const main = (size, rovers) => {
       return `The rover ${i} doesn't have an initial position.`;
     if (!rovers[i].hasOwnProperty("command"))
       return `The rover ${i} doesn't have instructions.`;
+    if (
+      !/^[0-4][0-4][NEWS]$/.test(rovers[i].initialPosition.replace(/\s+/g, ""))
+    )
+      return "Invalid start position";
 
     let parts = rovers[i].initialPosition.split(" ");
     let position = parts[0] + "-" + parts[1];
