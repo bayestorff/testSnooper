@@ -1,3 +1,23 @@
+_verifyDuplicateInitialPosition = array => {
+  var valueArr = array.map(function(item) {
+    return item.initialPosition;
+  });
+  var isDuplicate = valueArr.some(function(item, idx) {
+    return valueArr.indexOf(item) != idx;
+  });
+  return isDuplicate;
+};
+
+_verifyDuplicateCommand = array => {
+  var valueArr = array.map(function(item) {
+    return item.initialPosition;
+  });
+  var isDuplicate = valueArr.some(function(item, idx) {
+    return valueArr.indexOf(item) != idx;
+  });
+  return isDuplicate;
+};
+
 const moveObject = {
   S: [0, -1],
   W: [-1, 0],
@@ -41,6 +61,15 @@ turnRoverRight = facing => {
 const main = (size, rovers) => {
   let arrayReturn = [];
 
+  if (isNaN(size)) return "Size must be a number";
+  if (
+    _verifyDuplicateInitialPosition(rovers, "initialPosition") ||
+    _verifyDuplicateCommand(rovers, "command")
+  ) {
+    return "Rovers cannot start in the same spot e/ou finish navigation in the same spot";
+  }
+
+  if (!Array.isArray(rovers)) return "arrayRovers is invalid!";
   for (let i = 0; i < rovers.length; i++) {
     if (!rovers[i].hasOwnProperty("name"))
       return `The rover ${i} doesn't have a name.`;
@@ -52,6 +81,7 @@ const main = (size, rovers) => {
       !/^[0-4][0-4][NEWS]$/.test(rovers[i].initialPosition.replace(/\s+/g, ""))
     )
       return "Invalid start position";
+    // return "Rovers cannot start in the same position";
 
     let parts = rovers[i].initialPosition.split(" ");
     let position = parts[0] + "-" + parts[1];
@@ -70,10 +100,14 @@ const main = (size, rovers) => {
         newPosition = moveRoverForward({ facing, newPosition, size });
       }
       if (newPosition.error) {
-        console.log("Can not move beyond the boundaries of Mars");
+        return "Can not move beyond the boundaries of Mars";
       }
     }
-    arrayReturn.push(`rover${i + 1}: ` + newPosition + facing);
+
+    arrayReturn.push({
+      rover: i + 1,
+      position: newPosition + facing
+    });
   }
 
   return arrayReturn;
